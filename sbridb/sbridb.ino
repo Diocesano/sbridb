@@ -1,5 +1,5 @@
 /*
-  #Título: Não Durma no Trânsito
+  #Título: SBRIDB
   
   #Autores:  
     Alexandre Carlos Alves Vila Nova - 2016122@aluno.diocesanocaruaru.g12.br
@@ -11,16 +11,16 @@
   #Repositório do projeto no GitHub: https://github.com/Diocesano/sbridb
   
   #Descrição:
+  Projeto que tem como ideia medir uma bateria de um veículo e enviar os dados coletados para seu 
+  dispositivo móvel Android. Isso tem como objetivo eliminar ou diminuir os incidentes 
+  relacionados com a bateria de seu veículo, gerando transtornos.
   
- 
   #Componentes:
     ->1 placa baseada no Arduino Uno R3, utilizando o
       microcontrolador Atmel Atmega328p
     ->1 Módulo bluetooth HC-05
-
   
   #Conexões:
-
                                       +-----+
          +----[PWR]-------------------| USB |--+
          |                            +-----+  |
@@ -38,16 +38,18 @@
          | [ ]GND   -| D |-                    |
          | [ ]Vin   -| U |-               7[ ] |   
          |          -| I |-               6[ ]~|   
-         | [ ]A0    -| N |-               5[ ]~|   
-         | [ ]A1    -| O |-               4[ ] |   
-         | [ ]A2     +---+           INT1/3[ ]~|   
-         | [ ]A3                     INT0/2[ ] |   
-         | [ ]A4/SDA  RST SCK MISO     TX>1[ ] |   
-         | [ ]A5/SCL  [ ] [ ] [ ]      RX<0[ ] |   
+         | [ X ]A0  -| N |-               5[ ]~|   
+         | [   ]A1  -| O |-               4[ ] |   
+         | [   ]A2   +---+           INT1/3[ ]~|   
+         | [   ]A3                   INT0/2[ ] |   
+         | [   ]A4/SDARST SCK MISO     TX>1[Z] |   
+         | [   ]A5/SCL[ ] [ ] [ ]      RX<0[Y] |   
          |            [ ] [ ] [ ]              |
          |  UNO_R3    GND MOSI 5V  ____________/
           \_______________________/
 
+          X = Bateria
+          Y e Z = HC-06
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
        LICENÇA - Copyright 2018 Alexandre, Arthur, Lucas e Diógenes
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -74,7 +76,6 @@
     com este programa. Se não, veja <http://www.gnu.org/licenses/>.
   
   ------------------------------------------------------------------------------------      
-
  */
 
 int bateria = A0;
@@ -83,20 +84,19 @@ float tensao;
 
 void setup(){
   pinMode(bateria, INPUT);
-  Serial.begin(9600);
 }
 
 void loop(){
   nivel = analogRead(bateria);
   tensao = (nivel * 5)/1023;
-  delay(20000);
+  delay(1000);
   if(tensao >= 2.8){
     Serial.print(1);
   }
   if(tensao >= 2 && tensao < 2.8){
     Serial.print(2);
   }
-  if(tensao < 2.8 && tensao >=1){
+  if(tensao >=1 && tensao < 2){
     Serial.print(3);
   }
   if(tensao < 1 ){
@@ -104,4 +104,3 @@ void loop(){
   }
   
 }
-
